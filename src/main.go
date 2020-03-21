@@ -24,9 +24,11 @@ type GuildConfig struct {
 	Prefix   string
 }
 
+var config Config
+
 func main() {
 
-	data, err := ioutil.ReadFile("../config.json")
+	data, err := ioutil.ReadFile("config.json")
 	if err != nil {
 		fmt.Println("No Config was created! Creating one..")
 		createConfig()
@@ -34,7 +36,6 @@ func main() {
 		return
 	}
 
-	var config Config
 	err = json.Unmarshal(data, &config)
 
 	if err != nil {
@@ -42,7 +43,7 @@ func main() {
 		return
 	}
 
-	_, err = ioutil.ReadDir("../" + config.DataFolderPath)
+	_, err = ioutil.ReadDir(config.DataFolderPath)
 	if err != nil {
 		fmt.Println("No data Folder created creating one... ")
 		createDataFolder(config)
@@ -54,7 +55,7 @@ func main() {
 
 	for _, guild := range guilds {
 
-		guildFolderPath := "../" + config.DataFolderPath + "/" + guild.ID
+		guildFolderPath := config.DataFolderPath + "/" + guild.ID
 
 		_, err := ioutil.ReadDir(guildFolderPath)
 		if err != nil {
@@ -68,7 +69,8 @@ func main() {
 
 	}
 
-	// TODO: Add Handlers
+	dg.AddHandler(messageCreate)
+	dg.AddHandler(guildCreate)
 
 	err = dg.Open()
 	if err != nil {
@@ -84,6 +86,23 @@ func main() {
 	dg.Close()
 }
 
+func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
+	// TODO: Make some commands
+}
+
+func guildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
+
+	guildFolderPath := config.DataFolderPath + "/" + g.Guild.ID
+
+	// Checking and Creating Folder if needed (on Guild Join)
+	createGuildFolder(g.Guild.Name, g.Guild.ID, config.DataFolderPath)
+	createGuildConfig(guildFolderPath, g.Guild.Name, g.Guild.ID)
+}
+
+func guildDelete(s *discordgo.Session, g *discordgo.GuildDelete) {
+	// TODO: Delete useless guild Folders when bot disconnects
+}
+
 func createConfig() {
 	botConfig := Config{DataFolderPath: "Enter a Config Path", OwnerID: "Enter your ID from Discord HERE"}
 
@@ -93,7 +112,7 @@ func createConfig() {
 		return
 	}
 
-	err = ioutil.WriteFile("../config.json", botConfigJSON, 0644)
+	err = ioutil.WriteFile("config.json", botConfigJSON, 0644)
 	if err != nil {
 		fmt.Println("Something went wrong to write the BotConfig to a json file! err ->", err)
 		return
@@ -101,7 +120,7 @@ func createConfig() {
 }
 
 func createDataFolder(config Config) {
-	err := os.MkdirAll("../"+config.DataFolderPath, os.ModePerm)
+	err := os.MkdirAll(config.DataFolderPath, os.ModePerm)
 	if err != nil {
 		fmt.Printf("An error ocurred to create the data Folder. Please check your config path!")
 		return
@@ -111,7 +130,7 @@ func createDataFolder(config Config) {
 
 func createGuildFolder(guildName string, guildID string, dataFolderPath string) {
 	fmt.Println("Creating a Guild Folder for", guildName+"/"+guildID)
-	err := os.MkdirAll("../"+dataFolderPath+"/"+guildID, os.ModePerm)
+	err := os.MkdirAll(dataFolderPath+"/"+guildID, os.ModePerm)
 	if err != nil {
 		fmt.Println("Something went wrong.. check yout folder Paths")
 		return
