@@ -8,14 +8,15 @@ import (
 	"os/signal"
 	"syscall"
 
+	"./command"
+	"./presence"
 	"github.com/bwmarrin/discordgo"
 )
 
 // Config a struct for the config.json
 type Config struct {
-	OwnerID        string
-	DataFolderPath string
-	BotToken       string
+	OwnerID  string
+	BotToken string
 }
 
 // GuildConfig a struct for the data/{serverID}/config.json file.
@@ -24,11 +25,13 @@ type GuildConfig struct {
 	Prefix   string
 }
 
+var configPath = "config.json"
 var config Config
+var dataFolderPath = "data"
 
 func main() {
 
-	data, err := ioutil.ReadFile("config.json")
+	data, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		fmt.Println("No Config was created! Creating one..")
 		createConfig()
@@ -43,7 +46,7 @@ func main() {
 		return
 	}
 
-	_, err = ioutil.ReadDir(config.DataFolderPath)
+	_, err = ioutil.ReadDir(dataFolderPath)
 	if err != nil {
 		fmt.Println("No data Folder created creating one... ")
 		createDataFolder(config)
@@ -55,11 +58,11 @@ func main() {
 
 	for _, guild := range guilds {
 
-		guildFolderPath := config.DataFolderPath + "/" + guild.ID
+		guildFolderPath := dataFolderPath + "/" + guild.ID
 
 		_, err := ioutil.ReadDir(guildFolderPath)
 		if err != nil {
-			createGuildFolder(guild.Name, guild.ID, config.DataFolderPath)
+			createGuildFolder(guild.Name, guild.ID, dataFolderPath)
 		}
 
 		_, err = ioutil.ReadFile(guildFolderPath + "/config.json")
@@ -67,16 +70,23 @@ func main() {
 			createGuildConfig(guildFolderPath, guild.Name, guild.ID)
 		}
 
+		presence := discordgo.Presence{Status: discordgo.StatusDoNotDisturb}
+		dg.State.PresenceAdd(guild.ID, &presence)
+
 	}
 
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(guildCreate)
+	dg.AddHandler(presenceUpdate)
 
 	err = dg.Open()
 	if err != nil {
 		fmt.Println("Could not start the Bot, please check the Token!")
 		return
 	}
+
+	// Setting the presence
+	presence.SetPresence()
 
 	fmt.Println("Bot is now running. Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)
@@ -86,25 +96,39 @@ func main() {
 	dg.Close()
 }
 
+func presenceUpdate(s *discordgo.Session, p *discordgo.PresenceUpdate) {
+
+}
+
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// TODO: Make some commands
+	print(command.RunCommand())
 }
 
 func guildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
 
-	guildFolderPath := config.DataFolderPath + "/" + g.Guild.ID
+	guildFolderPath := dataFolderPath + "/" + g.Guild.ID
 
-	// Checking and Creating Folder if needed (on Guild Join)
-	createGuildFolder(g.Guild.Name, g.Guild.ID, config.DataFolderPath)
-	createGuildConfig(guildFolderPath, g.Guild.Name, g.Guild.ID)
+	_, err := ioutil.ReadDir(guildFolderPath)
+	if err != nil {
+		createGuildFolder(g.Guild.Name, g.Guild.ID, dataFolderPath)
+	}
+
+	_, err = ioutil.ReadFile(guildFolderPath + "/config.json")
+	if err != nil {
+		createGuildConfig(guildFolderPath, g.Guild.Name, g.Guild.ID)
+	}
+
 }
 
 func guildDelete(s *discordgo.Session, g *discordgo.GuildDelete) {
-	// TODO: Delete useless guild Folders when bot disconnects
+	// TODO: Delete useless guild Folders when bot disconnects..
 }
 
 func createConfig() {
-	botConfig := Config{DataFolderPath: "Enter a Config Path", OwnerID: "Enter your ID from Discord HERE"}
+	botConfig := Config{
+		OwnerID: "Enter your ID from Discord HERE",
+	}
 
 	botConfigJSON, err := json.Marshal(botConfig)
 	if err != nil {
@@ -112,7 +136,7 @@ func createConfig() {
 		return
 	}
 
-	err = ioutil.WriteFile("config.json", botConfigJSON, 0644)
+	err = ioutil.WriteFile(configPath, botConfigJSON, 0644)
 	if err != nil {
 		fmt.Println("Something went wrong to write the BotConfig to a json file! err ->", err)
 		return
@@ -120,7 +144,7 @@ func createConfig() {
 }
 
 func createDataFolder(config Config) {
-	err := os.MkdirAll(config.DataFolderPath, os.ModePerm)
+	err := os.MkdirAll(dataFolderPath, os.ModePerm)
 	if err != nil {
 		fmt.Printf("An error ocurred to create the data Folder. Please check your config path!")
 		return
@@ -140,7 +164,11 @@ func createGuildFolder(guildName string, guildID string, dataFolderPath string) 
 
 func createGuildConfig(guildFolderPath string, guildName string, guildID string) {
 	fmt.Println("Creating a GuildConfig file for", guildName+"/"+guildID)
-	guildConfig := GuildConfig{BotAdmin: "Enter a role ID that should manage this bot", Prefix: "--"}
+
+	guildConfig := GuildConfig{
+		BotAdmin: "Enter a role ID that should mana",
+		Prefix:   "--",
+	}
 
 	guildConfigJSON, err := json.Marshal(guildConfig)
 	if err != nil {
