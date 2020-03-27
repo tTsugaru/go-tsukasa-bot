@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"./command"
 	"./presence"
 	"github.com/bwmarrin/discordgo"
 )
@@ -101,8 +100,7 @@ func presenceUpdate(s *discordgo.Session, p *discordgo.PresenceUpdate) {
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	// TODO: Make some commands
-	print(command.RunCommand())
+
 }
 
 func guildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
@@ -183,4 +181,22 @@ func createGuildConfig(guildFolderPath string, guildName string, guildID string)
 	}
 
 	fmt.Println("Successfully created a GuildConfig for guild", guildName)
+}
+
+// GetGuildConfig gets the config of the given guild in the parameters
+func GetGuildConfig(guildID string) GuildConfig {
+
+	guildConfig := GuildConfig{}
+
+	_, err := ioutil.ReadDir(dataFolderPath + "/" + guildID)
+	if err != nil {
+		fmt.Println("Could not found the path to this Guild please contact the Developer.")
+		return guildConfig
+	}
+
+	data, err := ioutil.ReadFile(dataFolderPath + "/" + guildID + "/config.json")
+	err = json.Unmarshal(data, &guildConfig)
+
+	return guildConfig
+
 }
