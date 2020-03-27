@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"./presence"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -74,18 +73,15 @@ func main() {
 
 	}
 
+	dg.AddHandler(ready)
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(guildCreate)
-	dg.AddHandler(presenceUpdate)
 
 	err = dg.Open()
 	if err != nil {
 		fmt.Println("Could not start the Bot, please check the Token!")
 		return
 	}
-
-	// Setting the presence
-	presence.SetPresence()
 
 	fmt.Println("Bot is now running. Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)
@@ -95,12 +91,13 @@ func main() {
 	dg.Close()
 }
 
-func presenceUpdate(s *discordgo.Session, p *discordgo.PresenceUpdate) {
-
+func ready(s *discordgo.Session, e *discordgo.Ready) {
+	s.UpdateStatus(0, "Lucifer is Developing me :)")
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-
+	guildConfig := GetGuildConfig(m.GuildID)
+	print(guildConfig.BotAdmin, guildConfig.Prefix, m.Content)
 }
 
 func guildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
