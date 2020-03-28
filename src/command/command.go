@@ -26,9 +26,5 @@ func RunCommand(args []string, s *discordgo.Session, m *discordgo.MessageCreate)
 
 // Commands is an Array of Commands
 var Commands = []Command{
-	Command{
-		Name:    "ping",
-		Aliases: []string{"p"},
-		Invoke:  Invoke(Ping),
-	},
+	Command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(Ping)},
 }

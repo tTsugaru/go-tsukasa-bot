@@ -114,9 +114,18 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	args := strings.Split(messageWithoutPrefix, " ")
 
 	for _, cmd := range command.Commands {
-		if strings.Contains(cmd.Name, args[0]) {
-			print("IT EQUALS")
+		if !strings.Contains(cmd.Name, args[0]) && !Contains(cmd.Aliases, args[0]) {
+			continue
 		}
+
+		// TODO: Remove command from array
+		commandValue := cmd.Invoke(args, s, m)
+		if commandValue == 0 {
+			fmt.Println("Bot disconnect")
+		} else if commandValue == 1 {
+			continue
+		}
+
 	}
 
 }
@@ -217,4 +226,14 @@ func GetGuildConfig(guildID string) GuildConfig {
 
 	return guildConfig
 
+}
+
+// Contains looks for the given string in the given array
+func Contains(array []string, stringToSearch string) bool {
+	for _, a := range array {
+		if a == stringToSearch {
+			return true
+		}
+	}
+	return false
 }
