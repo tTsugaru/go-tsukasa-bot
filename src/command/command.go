@@ -17,13 +17,6 @@ func (inv Invoke) Invoke(agrs []string, s *discordgo.Session, m *discordgo.Messa
 	return inv(agrs, s, m)
 }
 
-// RunCommand test
-func RunCommand(args []string, s *discordgo.Session, m *discordgo.MessageCreate) func() int {
-	return func() int {
-		return 0
-	}
-}
-
 // Commands is an Array of Commands
 var Commands = []Command{
 	Command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(Ping)},
