@@ -6,8 +6,10 @@ import (
 	"io/ioutil"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
+	"./command"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -96,8 +98,27 @@ func ready(s *discordgo.Session, e *discordgo.Ready) {
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	guildConfig := GetGuildConfig(m.GuildID)
-	print(guildConfig.BotAdmin, guildConfig.Prefix, m.Content)
+	message := m.Content
+	//guildConfig := GetGuildConfig(m.GuildID)
+
+	// Checking if the Message is from the Bot
+	if m.Author.ID == s.State.User.ID {
+		return
+	}
+
+	if !strings.HasPrefix(message, "--") {
+		return
+	}
+
+	messageWithoutPrefix := strings.TrimPrefix(message, "--")
+	args := strings.Split(messageWithoutPrefix, " ")
+
+	for _, cmd := range command.Commands {
+		if strings.Contains(cmd.Name, args[0]) {
+			print("IT EQUALS")
+		}
+	}
+
 }
 
 func guildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
