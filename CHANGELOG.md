@@ -8,3 +8,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [Unreleased]: https://github.com/Rushifaaa/go-tsukasa-bot/
 # Added
 - Ping command
+- Mute command

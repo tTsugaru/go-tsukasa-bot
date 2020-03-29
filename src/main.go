@@ -94,7 +94,7 @@ func main() {
 }
 
 func ready(s *discordgo.Session, e *discordgo.Ready) {
-	s.UpdateStatus(0, "Lucifer is Developing me :)")
+	s.UpdateListeningStatus("Lucifer is Developing me :)")
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -120,9 +120,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		// TODO: Remove command from array
 		commandValue := cmd.Invoke(args, s, m)
-		if commandValue == 0 {
-			fmt.Println("Bot disconnect")
-		} else if commandValue == 1 {
+		if commandValue == 1 {
+			sc := make(chan os.Signal, 1)
+			s.Close()
+			fmt.Println("Bot disconnected by Owner ->", config.OwnerID)
+			<-sc
+		} else if commandValue == 0 {
 			continue
 		}
 
