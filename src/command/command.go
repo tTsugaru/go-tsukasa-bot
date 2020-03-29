@@ -2,6 +2,7 @@ package command
 
 import (
 	"./admin"
+	"./fun"
 	"./utility"
 	"github.com/bwmarrin/discordgo"
 )
@@ -25,4 +26,5 @@ func (inv Invoke) Invoke(args []string, s *discordgo.Session, m *discordgo.Messa
 var Commands = []Command{
 	Command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(utility.Ping)},
 	Command{Name: "mute", Aliases: []string{"m"}, Invoke: Invoke(admin.Mute)},
+	Command{Name: "yeet", Aliases: []string{"y"}, Invoke: Invoke(fun.Yeet)},
 }
