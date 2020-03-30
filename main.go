@@ -58,10 +58,6 @@ func main() {
 		if err != nil {
 			createGuildConfig(guildFolderPath, guild.Name, guild.ID)
 		}
-
-		presence := discordgo.Presence{Status: discordgo.StatusDoNotDisturb}
-		dg.State.PresenceAdd(guild.ID, &presence)
-
 	}
 
 	dg.AddHandler(ready)
