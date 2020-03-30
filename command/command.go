@@ -3,7 +3,6 @@ package command
 import (
 	"github.com/Rushifaaa/go-tsukasa-bot/command/admin"
 	"github.com/Rushifaaa/go-tsukasa-bot/command/fun"
-	"github.com/Rushifaaa/go-tsukasa-bot/command/utilities"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -24,7 +23,7 @@ func (inv Invoke) Invoke(args []string, s *discordgo.Session, m *discordgo.Messa
 
 // Commands is an Array of Commands
 var Commands = []command{
-	command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(utility.Ping)},
+	command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(fun.Ping)},
 	command{Name: "mute", Aliases: []string{"m"}, Invoke: Invoke(admin.Mute)},
 	command{Name: "yeet", Aliases: []string{"y"}, Invoke: Invoke(fun.Yeet)},
 }
