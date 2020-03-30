@@ -1,9 +1,9 @@
 package command
 
 import (
-	"./admin"
-	"./fun"
-	"./utility"
+	"github.com/Rushifaaa/go-tsukasa-bot/command/admin"
+	"github.com/Rushifaaa/go-tsukasa-bot/command/fun"
+	"github.com/Rushifaaa/go-tsukasa-bot/command/utility"
 	"github.com/bwmarrin/discordgo"
 )
 
