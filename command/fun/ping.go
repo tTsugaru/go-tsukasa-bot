@@ -1,4 +1,4 @@
-package utility
+package fun
 
 import "github.com/bwmarrin/discordgo"
 

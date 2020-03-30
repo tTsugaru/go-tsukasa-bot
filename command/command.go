@@ -3,12 +3,12 @@ package command
 import (
 	"github.com/Rushifaaa/go-tsukasa-bot/command/admin"
 	"github.com/Rushifaaa/go-tsukasa-bot/command/fun"
-	"github.com/Rushifaaa/go-tsukasa-bot/command/utility"
+	"github.com/Rushifaaa/go-tsukasa-bot/command/utilities"
 	"github.com/bwmarrin/discordgo"
 )
 
-// Command struct for the Command
-type Command struct {
+// command struct for the Command
+type command struct {
 	Name    string
 	Aliases []string
 	Invoke  Invoke
@@ -23,8 +23,8 @@ func (inv Invoke) Invoke(args []string, s *discordgo.Session, m *discordgo.Messa
 }
 
 // Commands is an Array of Commands
-var Commands = []Command{
-	Command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(utility.Ping)},
-	Command{Name: "mute", Aliases: []string{"m"}, Invoke: Invoke(admin.Mute)},
-	Command{Name: "yeet", Aliases: []string{"y"}, Invoke: Invoke(fun.Yeet)},
+var Commands = []command{
+	command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(utility.Ping)},
+	command{Name: "mute", Aliases: []string{"m"}, Invoke: Invoke(admin.Mute)},
+	command{Name: "yeet", Aliases: []string{"y"}, Invoke: Invoke(fun.Yeet)},
 }

@@ -10,23 +10,12 @@ import (
 	"syscall"
 
 	"github.com/Rushifaaa/go-tsukasa-bot/command"
+	"github.com/Rushifaaa/go-tsukasa-bot/types"
 	"github.com/bwmarrin/discordgo"
 )
 
-// Config a struct for the config.json
-type Config struct {
-	OwnerID  string
-	BotToken string
-}
-
-// GuildConfig a struct for the data/{serverID}/config.json file.
-type GuildConfig struct {
-	BotAdmin string
-	Prefix   string
-}
-
 var configPath = "config.json"
-var config Config
+var config types.Config
 var dataFolderPath = "data"
 
 func main() {
@@ -154,7 +143,7 @@ func guildDelete(s *discordgo.Session, g *discordgo.GuildDelete) {
 }
 
 func createConfig() {
-	botConfig := Config{
+	botConfig := types.Config{
 		OwnerID: "Enter your ID from Discord HERE",
 	}
 
@@ -171,7 +160,7 @@ func createConfig() {
 	}
 }
 
-func createDataFolder(config Config) {
+func createDataFolder(config types.Config) {
 	err := os.MkdirAll(dataFolderPath, os.ModePerm)
 	if err != nil {
 		fmt.Printf("An error ocurred to create the data Folder. Please check your config path!")
@@ -193,7 +182,7 @@ func createGuildFolder(guildName string, guildID string, dataFolderPath string) 
 func createGuildConfig(guildFolderPath string, guildName string, guildID string) {
 	fmt.Println("Creating a GuildConfig file for", guildName+"/"+guildID)
 
-	guildConfig := GuildConfig{
+	guildConfig := types.GuildConfig{
 		BotAdmin: "",
 		Prefix:   "--",
 	}
@@ -214,9 +203,9 @@ func createGuildConfig(guildFolderPath string, guildName string, guildID string)
 }
 
 // GetGuildConfig gets the config of the given guild in the parameters
-func GetGuildConfig(guildID string) GuildConfig {
+func GetGuildConfig(guildID string) types.GuildConfig {
 
-	guildConfig := GuildConfig{}
+	guildConfig := types.GuildConfig{}
 
 	_, err := ioutil.ReadDir(dataFolderPath + "/" + guildID)
 	if err != nil {
