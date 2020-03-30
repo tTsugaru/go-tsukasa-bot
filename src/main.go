@@ -99,18 +99,18 @@ func ready(s *discordgo.Session, e *discordgo.Ready) {
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	message := m.Content
-	//guildConfig := GetGuildConfig(m.GuildID)
+	guildConfig := GetGuildConfig(m.GuildID)
 
 	// Checking if the Message is from the Bot
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 
-	if !strings.HasPrefix(message, "--") {
+	if !strings.HasPrefix(message, guildConfig.Prefix) {
 		return
 	}
 
-	messageWithoutPrefix := strings.TrimPrefix(message, "--")
+	messageWithoutPrefix := strings.TrimPrefix(message, guildConfig.Prefix)
 	args := strings.Split(messageWithoutPrefix, " ")
 
 	for _, cmd := range command.Commands {
