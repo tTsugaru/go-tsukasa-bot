@@ -194,7 +194,7 @@ func createGuildConfig(guildFolderPath string, guildName string, guildID string)
 	fmt.Println("Creating a GuildConfig file for", guildName+"/"+guildID)
 
 	guildConfig := GuildConfig{
-		BotAdmin: "Enter a role ID that should mana",
+		BotAdmin: "",
 		Prefix:   "--",
 	}
 
