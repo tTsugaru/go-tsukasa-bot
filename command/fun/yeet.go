@@ -1,7 +1,7 @@
 package fun
 
 import (
-	"github.com/Rushifaaa/go-tsukasa-bot/command/utilities"
+	"github.com/Rushifaaa/go-tsukasa-bot/utilities"
 	"github.com/bwmarrin/discordgo"
 )
 

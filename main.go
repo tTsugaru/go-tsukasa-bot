@@ -11,16 +11,15 @@ import (
 
 	"github.com/Rushifaaa/go-tsukasa-bot/command"
 	"github.com/Rushifaaa/go-tsukasa-bot/types"
+	"github.com/Rushifaaa/go-tsukasa-bot/utilities"
 	"github.com/bwmarrin/discordgo"
 )
 
-var configPath = "config.json"
 var config types.Config
-var dataFolderPath = "data"
 
 func main() {
 
-	data, err := ioutil.ReadFile(configPath)
+	data, err := ioutil.ReadFile(types.ConfigPath)
 	if err != nil {
 		fmt.Println("No Config was created! Creating one..")
 		createConfig()
@@ -35,7 +34,7 @@ func main() {
 		return
 	}
 
-	_, err = ioutil.ReadDir(dataFolderPath)
+	_, err = ioutil.ReadDir(types.DataFolderPath)
 	if err != nil {
 		fmt.Println("No data Folder created creating one... ")
 		createDataFolder(config)
@@ -47,11 +46,11 @@ func main() {
 
 	for _, guild := range guilds {
 
-		guildFolderPath := dataFolderPath + "/" + guild.ID
+		guildFolderPath := types.DataFolderPath + "/" + guild.ID
 
 		_, err := ioutil.ReadDir(guildFolderPath)
 		if err != nil {
-			createGuildFolder(guild.Name, guild.ID, dataFolderPath)
+			createGuildFolder(guild.Name, guild.ID, types.DataFolderPath)
 		}
 
 		_, err = ioutil.ReadFile(guildFolderPath + "/config.json")
@@ -84,7 +83,7 @@ func ready(s *discordgo.Session, e *discordgo.Ready) {
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	message := m.Content
-	guildConfig := GetGuildConfig(m.GuildID)
+	guildConfig := utilities.GetGuildConfig(m.GuildID, types.DataFolderPath)
 
 	// Checking if the Message is from the Bot
 	if m.Author.ID == s.State.User.ID {
@@ -99,7 +98,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	args := strings.Split(messageWithoutPrefix, " ")
 
 	for _, cmd := range command.Commands {
-		if !strings.Contains(cmd.Name, args[0]) && !Contains(cmd.Aliases, args[0]) {
+		if !strings.Contains(cmd.Name, args[0]) && !utilities.Contains(cmd.Aliases, args[0]) {
 			continue
 		}
 
@@ -120,11 +119,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func guildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
 
-	guildFolderPath := dataFolderPath + "/" + g.Guild.ID
+	guildFolderPath := types.DataFolderPath + "/" + g.Guild.ID
 
 	_, err := ioutil.ReadDir(guildFolderPath)
 	if err != nil {
-		createGuildFolder(g.Guild.Name, g.Guild.ID, dataFolderPath)
+		createGuildFolder(g.Guild.Name, g.Guild.ID, types.DataFolderPath)
 	}
 
 	_, err = ioutil.ReadFile(guildFolderPath + "/config.json")
@@ -149,7 +148,7 @@ func createConfig() {
 		return
 	}
 
-	err = ioutil.WriteFile(configPath, botConfigJSON, 0644)
+	err = ioutil.WriteFile(types.ConfigPath, botConfigJSON, 0644)
 	if err != nil {
 		fmt.Println("Something went wrong to write the BotConfig to a json file! err ->", err)
 		return
@@ -157,7 +156,7 @@ func createConfig() {
 }
 
 func createDataFolder(config types.Config) {
-	err := os.MkdirAll(dataFolderPath, os.ModePerm)
+	err := os.MkdirAll(types.DataFolderPath, os.ModePerm)
 	if err != nil {
 		fmt.Printf("An error ocurred to create the data Folder. Please check your config path!")
 		return
@@ -167,7 +166,7 @@ func createDataFolder(config types.Config) {
 
 func createGuildFolder(guildName string, guildID string, dataFolderPath string) {
 	fmt.Println("Creating a Guild Folder for", guildName+"/"+guildID)
-	err := os.MkdirAll(dataFolderPath+"/"+guildID, os.ModePerm)
+	err := os.MkdirAll(types.DataFolderPath+"/"+guildID, os.ModePerm)
 	if err != nil {
 		fmt.Println("Something went wrong.. check yout folder Paths")
 		return
@@ -196,32 +195,4 @@ func createGuildConfig(guildFolderPath string, guildName string, guildID string)
 	}
 
 	fmt.Println("Successfully created a GuildConfig for guild", guildName)
-}
-
-// GetGuildConfig gets the config of the given guild in the parameters
-func GetGuildConfig(guildID string) types.GuildConfig {
-
-	guildConfig := types.GuildConfig{}
-
-	_, err := ioutil.ReadDir(dataFolderPath + "/" + guildID)
-	if err != nil {
-		fmt.Println("Could not found the path to this Guild please contact the Developer.")
-		return guildConfig
-	}
-
-	data, err := ioutil.ReadFile(dataFolderPath + "/" + guildID + "/config.json")
-	err = json.Unmarshal(data, &guildConfig)
-
-	return guildConfig
-
-}
-
-// Contains looks for the given string in the given array
-func Contains(array []string, stringToSearch string) bool {
-	for _, a := range array {
-		if a == stringToSearch {
-			return true
-		}
-	}
-	return false
 }
