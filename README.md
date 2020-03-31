@@ -39,7 +39,7 @@ Because I like the name :P
   - [ ] Wiki
   
 * Commands
-  - [ ] Ping
+  - [x] Ping
   - [ ] Git (Shows this repository)
   - [ ] Join
   - [ ] Disconnect
@@ -59,7 +59,7 @@ Because I like the name :P
     - [ ] Add/Remove Role
     - [ ] Kick
     - [ ] Ban
-    - [ ] Mute
+    - [x] Mute
     - [ ] Clear Chat
 
   
@@ -74,8 +74,6 @@ Because I like the name :P
 
 So if you decided to host your own Bot you need a Bot Token **-I assume you know how to get it, if not google it or duck it :P**
 
-Before you clone you need to install [discordgo](https://github.com/bwmarrin/discordgo).
-
 First clone this repository.  
 `git clone https://github.com/Rushifaaa/tsukasa-bot`
 
@@ -84,9 +82,11 @@ After that just go into the Directory.
 
 Now you can choose if you want the stable version or the development version.  
 You are on default in the `master` branch -> **Stable Version**  
-`git checkout develop` -> **Development verison**  
+`git checkout develop` -> **Development verison**
 
-You can start the bot with `go run src/main.go`
+After you selected one option you need to install the dependencies with `go get`
+
+Now, you can start the bot with `go run src/main.go`
 
 If you are starting for the first time it will create a `config.json` where you need to enter the data that is required.
 
