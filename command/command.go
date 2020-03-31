@@ -3,6 +3,7 @@ package command
 import (
 	"github.com/Rushifaaa/go-tsukasa-bot/command/admin"
 	"github.com/Rushifaaa/go-tsukasa-bot/command/fun"
+	"github.com/Rushifaaa/go-tsukasa-bot/command/music"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -27,5 +28,5 @@ var Commands = []command{
 	command{Name: "mute", Aliases: []string{"m"}, Invoke: Invoke(admin.Mute)},
 	command{Name: "yeet", Aliases: []string{"y"}, Invoke: Invoke(fun.Yeet)},
 	command{Name: "terminate", Aliases: []string{"kill", "q", "t", "quit"}, Invoke: Invoke(admin.Terminate)},
-	command{Name: "yeet", Aliases: []string{"join", "j"}, Invoke: Invoke(fun.Yeet)},
+	command{Name: "join", Aliases: []string{"j"}, Invoke: Invoke(music.Join)},
 }

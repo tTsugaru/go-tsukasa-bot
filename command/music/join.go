@@ -1,6 +1,10 @@
 package music
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"fmt"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 // Join makes the bot join into the channel, in wich the user is currently in
 func Join(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int {
@@ -12,9 +16,30 @@ func Join(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int {
 		return 0
 	}
 
-	err := s.ChannelVoiceJoin(guildID, channelID, false, true)
+	guild, err := s.Guild(m.GuildID)
 	if err != nil {
+		fmt.Println("LOL")
 		return 0
 	}
 
+	userChannelID := ""
+
+	for _, voiceState := range guild.VoiceStates {
+		if voiceState.UserID == m.Author.ID {
+			userChannelID = voiceState.ChannelID
+			break
+		}
+	}
+
+	vc, err := s.ChannelVoiceJoin(m.GuildID, userChannelID, false, false)
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	err = vc.Speaking(true)
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	return 0
 }
