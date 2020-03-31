@@ -27,4 +27,5 @@ var Commands = []command{
 	command{Name: "mute", Aliases: []string{"m"}, Invoke: Invoke(admin.Mute)},
 	command{Name: "yeet", Aliases: []string{"y"}, Invoke: Invoke(fun.Yeet)},
 	command{Name: "terminate", Aliases: []string{"kill", "q", "t", "quit"}, Invoke: Invoke(admin.Terminate)},
+	command{Name: "yeet", Aliases: []string{"join", "j"}, Invoke: Invoke(fun.Yeet)},
 }
