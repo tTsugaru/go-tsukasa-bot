@@ -15,7 +15,7 @@ func Terminate(args []string, s *discordgo.Session, m *discordgo.MessageCreate) 
 	if m.Author.ID == config.OwnerID {
 		guild, err := s.Guild(m.GuildID)
 		if err != nil {
-			fmt.Println("LOL")
+			fmt.Println(err)
 			return 0
 		}
 
