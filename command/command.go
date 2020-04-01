@@ -27,7 +27,7 @@ var Commands = []command{
 	command{Name: "ping", Aliases: []string{"p"}, Invoke: Invoke(fun.Ping)},
 	command{Name: "mute", Aliases: []string{"m"}, Invoke: Invoke(admin.Mute)},
 	command{Name: "yeet", Aliases: []string{"y"}, Invoke: Invoke(fun.Yeet)},
-	command{Name: "terminate", Aliases: []string{"kill", "q", "t", "quit"}, Invoke: Invoke(admin.Terminate)},
+	command{Name: "terminate", Aliases: []string{"kill", "t"}, Invoke: Invoke(admin.Terminate)},
 	command{Name: "join", Aliases: []string{"j"}, Invoke: Invoke(music.Join)},
-	command{Name: "quit", Aliases: []string{"q", "leave"}, Invoke: Invoke(music.Quit)},
+	command{Name: "disconnect", Aliases: []string{"d", "quit", "q", "leave"}, Invoke: Invoke(music.Disconnect)},
 }

@@ -19,7 +19,7 @@ func Join(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int {
 	guild, err := s.Guild(m.GuildID)
 
 	if err != nil {
-		fmt.Println("Couldn't find the guild.")
+		fmt.Println(err)
 		return 0
 	}
 
