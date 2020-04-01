@@ -39,12 +39,12 @@ outfile_contents=
 for langfile in "$langdir_path/$langfile_prefix"*"$langfile_suffix"; do
 	if [ "$langfile" = "$langdir_path/$langfile_prefix*$langfile_suffix" ]; then
 		echo "$0: no language file in directory $(realpath --relative-to=. "$langdir_path")" >&2
-		exit
+		exit 2
 	fi
 
 	if [ -n "$outfile_contents" ]; then
 		echo "$0: multiple languages are not yet supported" >&2
-		exit 2
+		exit 3
 	fi
 
 	outfile_contents="$outfile_base"
