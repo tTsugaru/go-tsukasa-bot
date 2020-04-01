@@ -29,13 +29,14 @@ func Terminate(args []string, s *discordgo.Session, m *discordgo.MessageCreate) 
 		}
 
 		vc, err := s.ChannelVoiceJoin(m.GuildID, channelID, false, false)
-		if err != nil {
-			fmt.Println(err)
-			return 0
+		if err == nil {
+			vc.Close()
+			return 1
 		}
+		fmt.Println("Voice Connection Error", err)
 
-		vc.Close()
 		return 1
 	}
+
 	return 0
 }
