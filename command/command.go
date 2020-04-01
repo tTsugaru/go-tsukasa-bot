@@ -4,6 +4,7 @@ import (
 	"github.com/Rushifaaa/go-tsukasa-bot/command/admin"
 	"github.com/Rushifaaa/go-tsukasa-bot/command/fun"
 	"github.com/Rushifaaa/go-tsukasa-bot/command/music"
+	"github.com/Rushifaaa/go-tsukasa-bot/types"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -15,11 +16,11 @@ type command struct {
 }
 
 // Invoke function for Command
-type Invoke func(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int
+type Invoke func(args []string, s *discordgo.Session, m *discordgo.MessageCreate, guildData *types.GuildData) int
 
 // Invoke method to turn a normal function into a Invoke function
-func (inv Invoke) Invoke(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int {
-	return inv(args, s, m)
+func (inv Invoke) Invoke(args []string, s *discordgo.Session, m *discordgo.MessageCreate, guildData *types.GuildData) int {
+	return inv(args, s, m, guildData)
 }
 
 // Commands is an Array of Commands

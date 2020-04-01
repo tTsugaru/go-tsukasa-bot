@@ -1,12 +1,13 @@
 package fun
 
 import (
+	"github.com/Rushifaaa/go-tsukasa-bot/types"
 	"github.com/Rushifaaa/go-tsukasa-bot/utilities"
 	"github.com/bwmarrin/discordgo"
 )
 
 // Yeet is a Fun command that moves the user into the AFK channel
-func Yeet(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int {
+func Yeet(args []string, s *discordgo.Session, m *discordgo.MessageCreate, guildData *types.GuildData) int {
 
 	// TODO: Check for permission
 

@@ -16,6 +16,7 @@ import (
 )
 
 var config types.Config
+var guildData = make(map[string]*types.GuildData)
 
 func main() {
 
@@ -45,6 +46,8 @@ func main() {
 	guilds, err := dg.UserGuilds(100, "0", "0")
 
 	for _, guild := range guilds {
+
+		guildData[guild.ID] = &types.GuildData{}
 
 		guildFolderPath := types.DataFolderPath + "/" + guild.ID
 
@@ -103,7 +106,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// TODO: Remove command from array
-		commandValue := cmd.Invoke(args, s, m)
+		commandValue := cmd.Invoke(args, s, m, guildData[m.GuildID])
 		if commandValue == 1 {
 			sc := make(chan os.Signal, 1)
 			s.Close()
@@ -118,6 +121,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func guildCreate(s *discordgo.Session, g *discordgo.GuildCreate) {
+
+	guildData[g.ID] = &types.GuildData{}
 
 	guildFolderPath := types.DataFolderPath + "/" + g.Guild.ID
 

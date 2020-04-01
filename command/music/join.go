@@ -3,11 +3,12 @@ package music
 import (
 	"fmt"
 
+	"github.com/Rushifaaa/go-tsukasa-bot/types"
 	"github.com/bwmarrin/discordgo"
 )
 
 // Join makes the bot join into the channel, in wich the user is currently in
-func Join(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int {
+func Join(args []string, s *discordgo.Session, m *discordgo.MessageCreate, guildData *types.GuildData) int {
 
 	apermission, err := s.State.UserChannelPermissions(s.State.User.ID, m.ChannelID)
 
@@ -37,6 +38,9 @@ func Join(args []string, s *discordgo.Session, m *discordgo.MessageCreate) int {
 		fmt.Println(err)
 		return 0
 	}
+	
+	guildData.VoiceConnection = vc
+
 	err = vc.Speaking(false)
 	if err != nil {
 		fmt.Println(err)
