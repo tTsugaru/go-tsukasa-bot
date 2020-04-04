@@ -15,7 +15,7 @@ readonly langdir_path="$(realpath "$rootdir_path/$langdir_relpath")"
 readonly langfile_prefix=''
 readonly langfile_suffix='.json'
 
-readonly go_package='strings'
+readonly go_package='utilities'
 
 readonly outfile_parentdir_relpath='utilities'
 readonly outfile_parentdir_path="$(realpath "$rootdir_path/$outfile_parentdir_relpath")"
