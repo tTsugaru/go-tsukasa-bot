@@ -19,7 +19,7 @@ readonly go_package='utilities'
 
 readonly outfile_parentdir_relpath='utilities'
 readonly outfile_parentdir_path="$(realpath "$rootdir_path/$outfile_parentdir_relpath")"
-readonly outfile_name="$go_package.go"
+readonly outfile_name="strings.go"
 readonly outfile_path="$(realpath "$outfile_parentdir_path/$outfile_name")"
 
 readonly field_format='const %s = %s\n'
