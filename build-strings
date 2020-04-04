@@ -51,6 +51,7 @@ for langfile in "$langdir_path/$langfile_prefix"*"$langfile_suffix"; do
 
 	tmpfile="$(mktemp)"
 	jq -r 'to_entries[]|(.key)' "$langfile" > "$tmpfile"
+	dos2unix -q "$tmpfile" # on Windows NT systems, jq exports with CRLF
 
 	while read -r key; do
 		value="$(jq -r ".$key" "$langfile")"
