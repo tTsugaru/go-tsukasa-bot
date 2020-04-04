@@ -26,5 +26,8 @@ jobs:
       run: |
         go get -v -t -d ./...
 
+    - name: Build Strings
+      run: ./build-strings
+
     - name: Build
       run: go build -v .
